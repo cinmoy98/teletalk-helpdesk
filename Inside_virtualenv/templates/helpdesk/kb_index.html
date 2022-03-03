@@ -1,0 +1,38 @@
+{% extends "helpdesk/public_base.html" %}{% load i18n %}
+
+{% block helpdesk_title %}{% trans "FAQs" %}{% endblock %}
+
+{% block helpdesk_breadcrumb %}
+<li class="breadcrumb-item">
+    <a href="{% url 'helpdesk:kb_index' %}">{% trans "FAQs" %}</a>
+</li>
+<li class="breadcrumb-item active">{% trans "Overview" %}</li>
+{% endblock %}
+
+{% block helpdesk_body %}
+<h2>{% trans "Frequently Asked Questions" %}</h2>
+
+<p>{% trans "We have listed a number of Frequently Asked Questions for your perusal in the following types. Please check to see if any of these questions address your problem prior to submitting a complain." %}</p>
+
+{% for category in kb_categories %}
+{% cycle 'one' 'two' 'three' as catnumperrow silent %}
+{% if catnumperrow == 'one' %}<div class="card-deck">{% endif %}
+<div class="card">
+    <div class="card-header">
+      <h5>{{ category.title }}</h5>
+    </div>
+    <div class="card-body">
+        <p class="card-text">{{ category.description }}</p>
+        <p class="card-text"><small class="text-muted"><a class="btn btn-primary" href='{{ category.get_absolute_url }}'>{% trans 'View FAQs' %} <i class="fa fa-share"></i></a></small></p>
+    </div>
+</div>
+{% if catnumperrow == 'three' %}</div>{% endif %}
+{% endfor %}
+
+<br><br>
+If your problem's solution is not in the FAQs or you are not satisfied with the details given in the FAQs then submit a complain.
+<br>
+<a class="btn btn-primary" href="{% url 'helpdesk:submit' %}">{% trans 'Submit Complain' %}</a>
+
+{% endblock %}
+
